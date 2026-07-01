@@ -4,7 +4,7 @@ import MessageBubble from "./MessageBubble";
 import Composer from "./Composer";
 import { useAuth } from "../context/AuthContext";
 
-export default function ChatWindow({ room, messages, loading, typingUser, presence, onSend, onTyping }) {
+export default function ChatWindow({ room, messages, loading, typingUser, presence, onSend, onTyping, onGroupClick }) {
   const { user } = useAuth();
   const listRef = useRef(null);
 
@@ -30,7 +30,20 @@ export default function ChatWindow({ room, messages, loading, typingUser, presen
       <header className="chat-header">
         <Avatar name={room.name} src={room.profilePicture} online={isOnline} size={40} />
         <div>
-          <div className="chat-header__name">{room.name}</div>
+{/*           <div className="chat-header__name">{room.name}</div> */}
+        <div
+            className="chat-header__name"
+            style={{
+                cursor: room.roomType === "GROUP" ? "pointer" : "default"
+            }}
+            onClick={() => {
+                if (room.roomType === "GROUP") {
+                    onGroupClick();
+                }
+            }}
+        >
+            {room.name}
+        </div>
           <div className="chat-header__status">
             {room.roomType === "GROUP" ? "Group" : isOnline ? "Online" : "Offline"}
           </div>
