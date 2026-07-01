@@ -26,3 +26,20 @@ export async function searchUsers(keyword) {
   const res = await client.get(`/users/search?keyword=${encodeURIComponent(keyword)}`);
   return res.data.data;
 }
+
+export async function updateProfilePicture(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await client.put(
+        "/users/profile-picture",
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+
+    return response.data.data;
+}

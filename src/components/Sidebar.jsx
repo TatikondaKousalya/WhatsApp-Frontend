@@ -3,11 +3,13 @@ import Avatar from "./Avatar";
 import NewChatDialog from "./NewChatDialog";
 import CurrentUserPanel from "./CurrentUserPanel";
 import { useAuth } from "../context/AuthContext";
+import ProfileDialog from "./ProfileDialog";
 
 export default function Sidebar({ rooms, roomsLoading, activeRoom, onSelectRoom, onRoomCreated, presence }) {
   const { user, logout } = useAuth();
   const [query, setQuery] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const filtered = rooms.filter((r) => (r.name || "").toLowerCase().includes(query.toLowerCase()));
 
@@ -88,8 +90,14 @@ export default function Sidebar({ rooms, roomsLoading, activeRoom, onSelectRoom,
         })}
       </div>
 
-      <CurrentUserPanel user={user} onLogout={logout} />
+      <CurrentUserPanel user={user} onLogout={logout} onClick={() => setProfileOpen(true)} />
 
+        {profileOpen && (
+            <ProfileDialog
+                user={user}
+                onClose={() => setProfileOpen(false)}
+            />
+        )}
       {dialogOpen && (
         <NewChatDialog
           onClose={() => setDialogOpen(false)}
