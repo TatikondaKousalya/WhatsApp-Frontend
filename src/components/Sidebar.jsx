@@ -90,7 +90,7 @@ export default function Sidebar({ rooms, roomsLoading, activeRoom, onSelectRoom,
         })}
       </div>
 
-      <CurrentUserPanel user={user} onLogout={logout} onClick={() => setProfileOpen(true)} />
+      <CurrentUserPanel user={user} onLogout={logout} onViewProfile={() => setProfileOpen(true)} />
 
         {profileOpen && (
             <ProfileDialog

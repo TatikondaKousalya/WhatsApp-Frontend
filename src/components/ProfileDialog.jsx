@@ -49,18 +49,26 @@ export default function ProfileDialog({ onClose }) {
 
   // ── Upload profile picture ────────────────────────────────────────
   async function handleFileChange(e) {
+    console.log("[1] handleFileChange fired", e.target.files);
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log("[2] no file in e.target.files — aborting");
+      return;
+    }
+    console.log("[3] file selected:", file.name, file.type, file.size);
 
     // Show local preview immediately — no waiting for the server
     setPreviewSrc(URL.createObjectURL(file));
     setError(""); setSuccess("");
     setUploading(true);
     try {
+      console.log("[4] calling updateProfilePicture...");
       const updated = await updateProfilePicture(file); // PUT /api/users/profile-picture
+      console.log("[6] updateProfilePicture resolved:", updated);
       setUser(updated);          // ← refresh AuthContext so avatar updates in sidebar
       setSuccess("Profile picture updated.");
     } catch (err) {
+      console.error("[5] updateProfilePicture threw:", err); // <-- read this message carefully
       setError(err?.response?.data?.message ?? "Picture upload failed.");
       setPreviewSrc(user?.profileImage ?? null); // revert preview on error
     } finally {
@@ -85,7 +93,11 @@ export default function ProfileDialog({ onClose }) {
           <div
             className="profile-modal__avatar-wrap"
             title="Change photo"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => {
+              console.log("[A] avatar-wrap clicked, fileInputRef.current =", fileInputRef.current);
+              fileInputRef.current?.click();
+              console.log("[B] .click() called on input");
+            }}
           >
             {previewSrc
               ? <img src={previewSrc} alt="" className="profile-modal__avatar-img" />
@@ -108,7 +120,10 @@ export default function ProfileDialog({ onClose }) {
             <button
               type="button"
               className="profile-modal__change-photo"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => {
+                console.log("[A2] Change photo button clicked, fileInputRef.current =", fileInputRef.current);
+                fileInputRef.current?.click();
+              }}
               disabled={uploading}
             >
               {uploading ? "Uploading…" : "Change photo"}

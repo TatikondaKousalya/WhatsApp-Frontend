@@ -30,7 +30,6 @@ export default function ChatWindow({ room, messages, loading, typingUser, presen
       <header className="chat-header">
         <Avatar name={room.name} src={room.profilePicture} online={isOnline} size={40} />
         <div>
-{/*           <div className="chat-header__name">{room.name}</div> */}
         <div
             className="chat-header__name"
             style={{

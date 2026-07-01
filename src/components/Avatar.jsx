@@ -8,9 +8,9 @@ function initials(name) {
     .join("");
 }
 
-export default function Avatar({ name, src, online, size = 44 }) {
+export default function Avatar({ name, src, online, size = 44, onClick }) {
   return (
-    <div className="avatar" style={{ width: size, height: size }}>
+    <div className="avatar" style={{ width: size, height: size }} onClick={onClick}>
       {src ? <img src={src} alt="" /> : initials(name)}
       {online && <span className="avatar-dot" />}
     </div>

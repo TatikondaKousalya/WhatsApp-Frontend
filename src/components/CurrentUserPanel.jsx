@@ -80,8 +80,8 @@ export default function CurrentUserPanel({ user, onLogout, onViewProfile, onSett
         aria-haspopup="menu"
         aria-expanded={menuOpen}
       >
-        <Avatar name={fullName} src={user.profileImage} online size={40} />
-        <div className="current-user__info">
+        <Avatar name={fullName} src={user.profilePicture} online size={40} onClick={onViewProfile} />
+        <div className="current-user__info" onClick={() => setMenuOpen(open => !open)}>
           <span className="current-user__name">{fullName}</span>
           <span className="current-user__email">{user.email}</span>
           <span className="current-user__status">
