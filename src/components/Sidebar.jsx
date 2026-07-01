@@ -54,10 +54,34 @@ export default function Sidebar({ rooms, roomsLoading, activeRoom, onSelectRoom,
             >
               <Avatar name={room.name} src={room.profilePicture} online={isOnline} />
               <div className="room-item__body">
-                <div className="room-item__top">
-                  <span className="room-item__name">{room.name}</span>
-                  <span className="room-item__tag">{room.roomType === "GROUP" ? "GROUP" : ""}</span>
-                </div>
+
+                  <div className="room-item__top">
+                      <span className="room-item__name">
+                          {room.name}
+                      </span>
+
+                      {room.lastMessageTime && (
+                          <span className="room-item__time">
+                              {new Date(room.lastMessageTime).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit"
+                              })}
+                          </span>
+                      )}
+                  </div>
+
+                  <div className="room-item__bottom">
+
+                      <span className="room-item__last-message">
+
+                          {room.roomType === "GROUP" && room.lastSenderName
+                              ? `${room.lastSenderName}: ${room.lastMessage ?? ""}`
+                              : room.lastMessage ?? "No messages yet"}
+
+                      </span>
+
+                  </div>
+
               </div>
             </button>
           );
