@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import Avatar from "./Avatar";
 import MessageBubble from "./MessageBubble";
 import Composer from "./Composer";
@@ -53,10 +53,38 @@ export default function ChatWindow({ room, messages, loading, typingUser, presen
         {loading && <div className="empty-rooms">Loading messages…</div>}
         {!loading && messages.length === 0 && <div className="empty-rooms">Say hello 👋</div>}
         {messages.map((m, i) => {
-          const isMine = m.senderId === user?.id;
-          const prev = messages[i - 1];
-          const showSender = room.roomType === "GROUP" && (!prev || prev.senderId !== m.senderId);
-          return <MessageBubble key={m.id ?? i} message={m} isMine={isMine} showSender={showSender} />;
+            const previous = messages[i - 1];
+
+            const currentDate = getDateLabel(m.createdAt);
+            const previousDate = previous
+                ? getDateLabel(previous.createdAt)
+                : null;
+
+            const showDate = currentDate !== previousDate;
+
+            const isMine = m.senderId === user?.id;
+
+            const showSender =
+                room.roomType === "GROUP" &&
+                (!previous || previous.senderId !== m.senderId);
+
+            return (
+                <Fragment key={m.id ?? i}>
+                    {showDate && (
+                            <div className="date-divider-wrapper">
+                                <div className="date-divider">
+                                    {currentDate}
+                                </div>
+                            </div>
+                        )}
+
+                    <MessageBubble
+                        message={m}
+                        isMine={isMine}
+                        showSender={showSender}
+                    />
+                </Fragment>
+            );
         })}
       </div>
 
@@ -65,4 +93,26 @@ export default function ChatWindow({ room, messages, loading, typingUser, presen
       <Composer onSend={onSend} onTyping={onTyping} />
     </main>
   );
+}
+
+function getDateLabel(dateString) {
+    const date = new Date(dateString);
+
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+        return "Today";
+    }
+
+    if (date.toDateString() === yesterday.toDateString()) {
+        return "Yesterday";
+    }
+
+    return date.toLocaleDateString([], {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
 }
