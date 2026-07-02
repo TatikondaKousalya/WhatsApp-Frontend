@@ -762,6 +762,16 @@
   flex-shrink: 0;
 }
 
+.gm-avatar {
+    overflow: hidden;
+}
+
+.gm-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* ── Member row body ── */
 .gm-row__body {
   min-width: 0;
